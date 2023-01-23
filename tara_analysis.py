@@ -5,6 +5,7 @@ import h5py
 from scipy.signal import find_peaks 
 from scipy import stats
 import os 
+from matplotlib.widgets import TextBox
 
 class Nanopore():
     def __init__(self, file):
