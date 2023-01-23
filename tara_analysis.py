@@ -6,8 +6,6 @@ from scipy.signal import find_peaks
 from scipy import stats
 import os 
 
-
-
 class Nanopore():
     def __init__(self, file):
         self.event_set = self.load_data(file)
@@ -17,10 +15,10 @@ class Nanopore():
         self.event_set_norm = self.event_set
 
         #properties for meassurement
-        self.h=0.015
+        self.h=0.1
         self.t=-0.015
         self.d=25
-        self.p=0.02 #adust down to detect smaller peaks
+        self.p=0.015 #adust down to detect smaller peaks
         self.w=1 #Required width of peaks in samples, adjust to get rid of some low prominence peaks
         self.wl=10 #ts rid of folds, go down
 
@@ -32,7 +30,7 @@ class Nanopore():
         event_data=h5py.File(e_fp, 'r')
         return event_data
 
-    def filter_noise(self, level = 0.02): #works
+    def filter_noise(self, level = 0.04): #works
         event_ln = [] 
         for j in self.event_list:
             noise = self.event_set[j].attrs["rms_nA"]<level #filtering out noisy events
@@ -98,25 +96,7 @@ class Nanopore():
             group_key = list(file)
             for i in group_key:
                 self.plot_one_event(i, peaks=True, print_heights=True)
+        show= plt.show()
         return show
 
 ##########################################################################################
-
-#Control = Nanopore(file="C:/Users/tm763/Documents/Nano_MRes/Mini_1/nanopore_analysis/TM_1_A_111_control_1")
-Control = Nanopore(file=r"C:/Users/tm763/Documents/Nano_MRes/Mini_1/nanopore_analysis")
-Control.filter_noise(level=1)
-
-h=0.1
-t=-0.015
-d=25
-p=0.005 #adust down to detect smaller peaks
-w=1 #Required width of peaks in samples, adjust to get rid of some low prominence peaks
-wl=10 #ts rid of folds, go down
-
-for event in Control.event_list_ln[0:10]:
-    Control.plot_one_event(event, peaks=True)
-#print(len(Control.event_list_ln))
-
-cas = [109,130,153,161,184,217,225,265,279,282,289,291,310,313,330,342,334,356,359,365,372,382,389,393,397,401,435,436,443,473,474,503]
-control1 = [6, 44, 98, 112, 135, 206, 225, 246]
-control2 = [39, 50, 56, 57, 66, 69, 89, 113, 114,118,143,147,154,156,159,187,192,214,220,235,236,248]
